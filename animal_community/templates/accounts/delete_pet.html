@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ pet.name }}の削除確認</h1>
+<p>本当にこのペット情報を削除しますか？</p>
+<form method="post">
+    {% csrf_token %}
+    {{ delete_pet_form.as_p }}
+    <button type="submit">削除する</button>
+    <a href="{% url 'accounts:user_profile' %}">キャンセル</a>
+</form>
+{% endblock %}

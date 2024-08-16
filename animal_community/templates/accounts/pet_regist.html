@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center>
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message.message }}</div>
+        {% endfor %}
+    {% endif %}
+    <h2>ペット情報の登録</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <table>
+        {% csrf_token %}
+        {{ pet_form.as_table }}
+        </table>
+        <button type="submit" class="btn btn-primary">登録</button>
+    </form>
+</center>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ pet.name }}の情報を編集</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ pet_form.as_p }}
+    <button type="submit" class="btn btn-primary">更新</button>
+  </form>
+  <a href="{% url 'accounts:pet_profile' pet.id %}">戻る</a>
+{% endblock %}

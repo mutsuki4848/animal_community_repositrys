@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<center>
+<h1>{{ pet.name }}のプロフィール</h1>
+<img width="400px" height="400px" src="{% if pet.picture %}{{ pet.picture.url }}{% else %}/media/pet_pictures/default_pet.jpg{% endif %}">
+<p>名前: {{ pet.name }}</p>
+<p>年齢: {{ pet.age }}歳</p>
+<p>性別: {{ pet.get_sex_display }}</p>
+<p>種類: {{ pet.get_genre_display }}</p>
+<p>品種: {{ pet.breed }}</p>
+<p>性格や特徴: {{ pet.characteristic }}</p>
+<form method="post" action="{% url 'accounts:delete_pet' pet.id %}">
+    {% csrf_token %}
+    <a href="{% url 'accounts:pet_edit' pet.id %}" class="btn btn-outline-primary">編集</a>
+    <button type="submit" class="btn btn-outline-danger">このペットの情報を削除</button>
+</form>
+<a href="{% url 'accounts:user_profile' %}"class="btn btn-outline-secondary mt-2">戻る</a>
+</center>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<center>
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message.message }}</div>
+        {% endfor %}
+    {% endif %}
+    <h1>{{ theme.title }}</h1>
+    {% if user.is_authenticated %}
+    <form method="POST" enctype="multipart/form-data">
+        <table>
+        {% csrf_token %}
+        {{ post_comments_form.as_table }}
+        </table>
+        <input type="button" value="一時保存" id="save_comment">
+        <input type="submit" value="コメント送信">
+    </form>
+    {% else %}
+    <p>コメントをしたい場合はログインをしてください。</p>
+    {% endif %}
+    <hr size="5">
+</center>
+    {% for comment in comments %}
+    <div class="col-1 offset-1">
+        {% if comment.user.picture %}
+            <img style="float:left;" width="100px" height="100px" src="{{ comment.user.picture.url }}">
+        {% endif %}
+    </div>
+    <div class="col-8 offset-2">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong><p>{{ comment.user.username }}</p></strong>
+            {% if comment.user == user %}
+            <p><a class="navbar-brand" href="{% url 'chat_category:post_delete' id=comment.id %}">削除</a></p>
+            {% endif %}
+        </div>
+        <p>{{ comment.comment | linebreaks }}</p>
+        {% if comment.image %}
+        <div>
+            <img src="{{ comment.image.url }}" alt="Comment Image" style="max-width: 100%; height: auto;">
+        </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <div>
+            <a href="{% url 'chat_category:like_comment' comment.id %}">
+                💗 {{ comment.like_count }} 
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-10 offset-1">
+    <hr>
+    </div>
+    {% endfor %}
+{% endblock %}
+{% block javascript %}
+<script>
+    $("#save_comment").click(function(){
+        var comment = $("#id_comment").val();
+        $.ajax({
+            url: "{% url 'chat_category:save_comment' %}",
+            type: "GET",
+            data: {comment: comment, theme_id: "{{ theme.id }}"},
+            dataType: "json",
+            success: function(json){
+                if(json.message){
+                    alert(json.message);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

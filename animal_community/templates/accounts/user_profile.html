@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<center>
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message.message }}</div>
+        {% endfor %}
+    {% endif %}
+    <p><a class="navbar-brand" href="{% url 'accounts:user_edit' %}">プロフィールの変更</a></p>
+<head>
+    <title>プロフィール</title>
+</head>
+<body>
+    <h1>{{ user.username }}のプロフィール</h1>
+    <img width="200px" height="200px" src="{% if user.picture %}{{ user.picture.url }}{% else %}/media/picture/default_profile.jpg{% endif %}">
+    <p><strong>名前:</strong> {{ user.username }}</p>
+    <p><strong>年齢:</strong> {{ user.age }}</p>
+    <p><strong>好きな動物:</strong>
+        {% if user.favorite_animals %}
+            {% for animal in user.favorite_animals %}
+                {% if animal == '1' %} 🐶 犬
+                {% elif animal == '2' %} 🐱 猫
+                {% elif animal == '3' %} 🐦 鳥
+                {% elif animal == '4' %} 🐰 ウサギ
+                {% elif animal == '5' %} 🦎 爬虫類
+                {% endif %}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            なし
+        {% endif %}
+    </p>
+    <p><strong>自己紹介:</strong> {{ user.bio }}</p>
+    <p><strong>メールアドレス:</strong> {{ user.email }}</p>
+    <h2>{{ user.username }}さんのペット情報</h2>
+    {% if user_pets %}
+        <ul>
+            {% for pet in user_pets %}
+                <a href="{% url 'accounts:pet_profile' pet.id %}">
+                    {{ pet.name }}({{ pet.get_sex_display }})<br>
+                </a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>ペットが登録されていません。</p>
+    {% endif %}
+</body>
+</center>
+</html>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var fadeInElements = document.querySelectorAll('.fade-in');
+            
+            fadeInElements.forEach(function(element) {
+                element.classList.add('show');
+            });
+
+            // アラートの処理
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.addEventListener('animationend', function() {
+                    alert.style.display = 'none'; // アニメーションが終了した後にメッセージを非表示にする
+                });
+            });
+        });
+    </script>
+</head>
+<div class="home-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message.message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="home-content">
+        <div class="fade-in fade-in-left">
+            <h1 class="home-title">ホーム</h1>
+            <p class="home-subtitle">動物好きのためのSNS<br>「ぺっとも！」</p>
+        </div>
+        {% if not user.is_authenticated %}
+            <div class="home-buttons">
+                <a href="{% url 'accounts:regist' %}" class="btn btn-outline-success">新規登録</a>
+                <a href="{% url 'accounts:user_login' %}" class="btn btn-outline-primary">ログイン</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

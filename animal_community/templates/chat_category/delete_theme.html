@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<center>
+    <strong>
+    <h1>グループチャット削除画面</h1>
+    </strong>
+    <form method="POST">
+        <table>
+        {% csrf_token %}
+        {{ delete_theme_form.as_table }}
+        </table>
+        <input type="submit" value="削除">
+    </form>
+</center>
+{% endblock %}

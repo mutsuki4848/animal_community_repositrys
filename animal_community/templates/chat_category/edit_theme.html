@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<center>
+    <strong>
+    <h1>グループチャット編集画面</h1>
+    </strong>
+    <form method="POST">
+        <table>
+        {% csrf_token %}
+        {{ edit_theme_form.as_table }}
+        </table>
+        <input type="submit" value="更新">
+    </form>
+    <p><a class="navbar-brand" href="{% url 'chat_category:delete_theme' id=id %}">削除する</a></p>
+</center>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<center>
+{% if messages %}
+    {% for message in messages %}
+        <div>{{ message.message }}</div>
+    {% endfor %}
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+        <h1>プロフィール変更</h1>
+    <table>
+        {% csrf_token %}
+        {{ user_edit_form.as_table }}
+    </table>
+    <input type="submit" value="更新">
+</form>
+<a href="{% url 'accounts:change_password' %}">パスワード変更</a>
+</center>
+{% endblock %}
