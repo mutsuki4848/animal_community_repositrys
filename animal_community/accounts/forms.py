@@ -27,7 +27,9 @@ class RegistForm(forms.ModelForm):
         user = super().save(commit=False)
         validate_password(self.cleaned_data['password'], user)
         user.set_password(self.cleaned_data['password'])
-        user.save()
+        user.is_active = True  # ユーザーをアクティブに設定
+        if commit:
+            user.save()
         return user    
         
 class LoginForm(forms.Form):

@@ -17,7 +17,9 @@ def regist(request):
     regist_form = forms.RegistForm(request.POST or None)
     if regist_form.is_valid():
         try:
-            regist_form.save()
+            user = regist_form.save(commit=False)
+            user.is_active = True  # ユーザーをアクティブに設定
+            user.save()
             return redirect('accounts:home')
         except ValidationError as e:
             regist_form.add_error('password', e) 
