@@ -19,6 +19,7 @@
                 <th>タイトル</th>
                 <th>ペットジャンル</th>
                 <th>作成者</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,10 +28,11 @@
                 <td>{{ forloop.counter }}</td>
                 <td><a href="{% url 'chat_category:post_comments' theme_id=theme.id %}">{{theme.title }}</a></td>
                 <td><a>{{ theme.get_pet_genre_display }}</a></td>
+                <td>{{ theme.user.username }}</td>
                 {% if theme.user.id == user.id %}
-                    <td><a href="{% url 'chat_category:edit_theme' id=theme.id %}">{{theme.user.username }}</a></td>
+                    <td><a href="{% url 'chat_category:edit_theme' id=theme.id %}">編集</a></td>
                 {% else %}
-                    <td>{{ theme.user.username }}</td>
+                    <td></td> <!-- 編集リンクが表示されない場合の空のセル -->
                 {% endif %}
             </tr>
         {% endfor %}

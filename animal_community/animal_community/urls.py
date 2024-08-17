@@ -6,7 +6,7 @@ from accounts.views import show_error_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    path('', include('accounts.urls')),
     path('chat_category/', include('chat_category.urls')),
 ]
 

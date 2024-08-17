@@ -65,8 +65,8 @@ def clean_picture(self):
     return picture
 
 class PasswordChangeForm(forms.ModelForm):
-    password = forms.CharField(label='パスワード', widget=forms.PasswordInput())
-    confirm_password = forms.CharField(label='パスワード再入力', widget=forms.PasswordInput())
+    password = forms.CharField(label='新規パスワード', widget=forms.PasswordInput())
+    confirm_password = forms.CharField(label='新規パスワード再入力', widget=forms.PasswordInput())
     
     class Meta():
         model = Users
