@@ -22,10 +22,19 @@ class Pet(models.Model):
 )
     breed = models.CharField(max_length=100, blank=True)  # 品種
     characteristic = models.TextField(blank=True)  # 性格や特徴
-    
+    owner = models.ForeignKey(
+        'Users', on_delete=models.CASCADE, related_name='pets'
+    )  # 所有者の追加
+
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.owner and hasattr(self, 'request'):
+            # 保存時にリクエストが存在する場合、リクエストのユーザーを所有者として設定
+            self.owner = self.request.user
+        super().save(*args, **kwargs)
+        
 class Users(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255)
     age = models.PositiveIntegerField()

@@ -8,7 +8,10 @@
             <div>{{ message.message }}</div>
         {% endfor %}
     {% endif %}
+    {% if user.id == request.user.id %}
     <p><a class="navbar-brand" href="{% url 'accounts:user_edit' %}">プロフィールの変更</a></p>
+    {% else %}
+    {% endif %}
 <head>
     <title>プロフィール</title>
 </head>

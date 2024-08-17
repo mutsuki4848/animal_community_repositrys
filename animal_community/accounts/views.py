@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from . import forms
 from django.core.exceptions import ValidationError
-from .models import UserActivateTokens, Pet
+from .models import UserActivateTokens, Pet, Users
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -70,7 +70,7 @@ def user_edit(request):
         user.favorite_animals = ''.join(user_edit_form.cleaned_data['favorite_animals'])
         user.save()
         messages.success(request, '更新完了しました。')
-        return redirect('accounts:user_profile')
+        return redirect('accounts:user_profile', user_id=request.user.id)
     return render(
             request, 'accounts/user_edit.html', context={
             'user_edit_form': user_edit_form,
@@ -100,11 +100,12 @@ def show_error_page(request, exception):
     )
     
 @login_required
-def user_profile(request):
-    user_pets = request.user.pet.all()  # ログインユーザーのペット情報を取得
+def user_profile(request, user_id):
+    user = get_object_or_404(Users, id=user_id)
+    user_pets = user.pet.all()  # ログインユーザーのペット情報を取得
     return render(
         request, 'accounts/user_profile.html', context={
-            'user': request.user,
+            'user': user,
             'user_pets': user_pets,  # ペット情報をテンプレートに渡す
         }
     )
@@ -115,15 +116,20 @@ def pet_regist(request):
     pet_form = forms.PetRegistForm(request.POST or None, request.FILES or None)
     if pet_form.is_valid():
         pet = pet_form.save(commit=False)
+        pet.owner = request.user
         if not pet.picture:
             pet.picture = 'pet_pictures/default_pet.jpg'
         pet.save()
         request.user.pet.add(pet)
         messages.success(request, 'ペット情報を登録しました。')
-        return redirect('accounts:user_profile')
+        return redirect('accounts:user_profile', user_id=request.user.id)
+
+    user_pets = request.user.pet.all()
+    
     return render(
         request, 'accounts/pet_regist.html', context={
             'pet_form': pet_form,
+            'user_pets': user_pets,  # 取得したペット情報をテンプレートに渡す
         }
     )
     
@@ -150,7 +156,7 @@ def delete_pet(request, pet_id):
             if delete_pet_form.cleaned_data['confirm']:
                 pet.delete()
                 messages.success(request, f'{pet.name}のプロフィールを削除しました。')
-                return redirect('accounts:user_profile')
+                return redirect('accounts:user_profile', user_id=request.user.id)
             else:
                 messages.error(request, '削除がキャンセルされました。')
     

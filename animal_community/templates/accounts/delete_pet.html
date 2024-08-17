@@ -7,6 +7,6 @@
     {% csrf_token %}
     {{ delete_pet_form.as_p }}
     <button type="submit">削除する</button>
-    <a href="{% url 'accounts:user_profile' %}">キャンセル</a>
+    <a href="{% url 'accounts:user_profile' user_id=user.id %}">キャンセル</a>
 </form>
 {% endblock %}

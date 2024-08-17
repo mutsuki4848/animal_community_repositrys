@@ -15,5 +15,24 @@
         </table>
         <button type="submit" class="btn btn-primary">登録</button>
     </form>
+<hr>
+<h3>既に登録されているペット情報</h3>
+    {% if user_pets %}
+        <ul>
+            {% for pet in user_pets %}
+                <li type="none">
+                        <img width="100px" height="100px" src="{% if pet.picture %}{{ pet.picture.url }}{% else %}/media/pet_pictures/default_pet.jpg{% endif %}"><br>
+                        {{ pet.name }} <br>
+                        ({{ pet.get_genre_display }}, {{ pet.get_sex_display }})<br>
+                    <a href="{% url 'accounts:pet_profile' pet.id %}" class="btn btn-outline-success">プロフィール</a>
+                    <a href="{% url 'accounts:pet_edit' pet.id %}" class="btn btn-outline-primary">編集</a>
+                    <a href="{% url 'accounts:delete_pet' pet.id %}" class="btn btn-outline-danger">削除</a>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>ペットが登録されていません。</p>
+    {% endif %}
 </center>
 {% endblock %}

@@ -29,7 +29,7 @@
     </div>
     <div class="col-8 offset-2">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <strong><p>{{ comment.user.username }}</p></strong>
+            <strong><a href="{% url 'accounts:user_profile' user_id=comment.user.id %}"><p>{{ comment.user.username }}</p></a></strong>
             {% if comment.user == user %}
             <p><a class="navbar-brand" href="{% url 'chat_category:post_delete' id=comment.id %}">削除</a></p>
             {% endif %}

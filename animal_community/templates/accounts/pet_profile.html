@@ -9,11 +9,16 @@
 <p>種類: {{ pet.get_genre_display }}</p>
 <p>品種: {{ pet.breed }}</p>
 <p>性格や特徴: {{ pet.characteristic }}</p>
-<form method="post" action="{% url 'accounts:delete_pet' pet.id %}">
-    {% csrf_token %}
-    <a href="{% url 'accounts:pet_edit' pet.id %}" class="btn btn-outline-primary">編集</a>
-    <button type="submit" class="btn btn-outline-danger">このペットの情報を削除</button>
-</form>
-<a href="{% url 'accounts:user_profile' %}"class="btn btn-outline-secondary mt-2">戻る</a>
+
+{% if user.id == pet.owner.id %}
+    <form method="post" action="{% url 'accounts:delete_pet' pet.id %}">
+        {% csrf_token %}
+        <a href="{% url 'accounts:pet_edit' pet.id %}" class="btn btn-outline-primary">編集</a>
+        <button type="submit" class="btn btn-outline-danger">このペットの情報を削除</button>
+    </form>
+{% else %}
+    <!-- 所有者でない場合はボタンを表示しない -->
+{% endif %}
+<a href="{% url 'accounts:user_profile' user_id=pet.owner.id %}" class="btn btn-outline-secondary mt-2">戻る</a>
 </center>
 {% endblock %}
